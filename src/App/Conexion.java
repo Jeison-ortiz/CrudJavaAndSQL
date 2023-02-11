@@ -25,23 +25,22 @@ public class Conexion {
     
     public Conexion(){
         this.usuario ="sa";
-        this.password = "1234";
+        this.password = "123456789";
         this.puerto = "1433";
-        this.nombreBd = "Conexion";
+        this.nombreBd = "escuela";
     }
-    
-    public void ConexionSQLSERVER(){
+     
+    public Connection getConexion(){
     try{
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String connectionUrl = "jdbc:sqlserver://localhost:"+puerto+";databaseName="+nombreBd+";user="+usuario+"password="+password+";";
+        String connectionUrl = "jdbc:sqlserver://localhost:"+puerto+";databaseName="+nombreBd+";user="+usuario+";password="+password+";";
         con = DriverManager.getConnection(connectionUrl);
         System.out.println("conexion exitosa");
+        return con;
         
     }catch(Exception e){
-        System.out.println("Error" + e.toString());
-    
+        System.out.println("Error: " + e.toString());
+        return null;
     }
-    
     }
-    
 }

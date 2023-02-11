@@ -4,18 +4,28 @@
  */
 package App;
 
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.ButtonGroup;
+
 /**
  *
  * @author ortiz
  */
 public class Alumnos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Alumnos
-     */
+    
+    ButtonGroup btnGr;
     public Alumnos() {
         initComponents();
+        txtId.setVisible(false);
+        btnGr = new ButtonGroup();
+        btnGr.add(rbMasculino);
+        btnGr.add(rbFemenino);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,7 +55,7 @@ public class Alumnos extends javax.swing.JFrame {
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Alumnos");
@@ -149,10 +159,10 @@ public class Alumnos extends javax.swing.JFrame {
         btnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnLimpiar.setText("Limpiar");
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtIdActionPerformed(evt);
             }
         });
 
@@ -190,14 +200,12 @@ public class Alumnos extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtMatricula, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                                    .addComponent(txtNombre))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtMatricula, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                            .addComponent(txtNombre)
+                            .addComponent(txtEdad))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 54, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -207,7 +215,7 @@ public class Alumnos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -279,6 +287,37 @@ public class Alumnos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEmailActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+       String matricula = txtMatricula.getText();
+       String nombre = txtNombre.getText();
+       int edad = Integer.parseInt(txtEdad.getText());
+       String email = txtEmail.getText();
+       String sexo;
+       if(rbMasculino.isSelected()==true){
+           sexo ="M";
+       }else if(rbFemenino.isSelected()==true){
+           sexo = "F";
+       }else{
+           sexo = "M";
+       }
+       
+        try {
+            Conexion conexion = new Conexion();
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO alumnos (matricula,nombre,edad,sexo,email,activo) VALUES (?,?,?,?,?,?)");
+            
+            ps.setString(1,matricula);
+            ps.setString(2,nombre);
+            ps.setInt(3,edad);
+            ps.setString(4,sexo);
+            ps.setString(5,email);
+            ps.setInt(6,1);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Registro guardado");
+            limpiar();
+            
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null,e.toString());
+        }
        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -286,13 +325,20 @@ public class Alumnos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtIdActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+   
+    private void limpiar(){
+    txtId.setText("");
+    txtMatricula.setText("");
+    txtNombre.setText("");
+    txtEdad.setText("");
+    txtEmail.setText("");
+    btnGr.clearSelection();
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -338,12 +384,12 @@ public class Alumnos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JRadioButton rbFemenino;
     private javax.swing.JRadioButton rbMasculino;
     private javax.swing.JTable tblAlumnos;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtMatricula;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
