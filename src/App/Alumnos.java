@@ -94,6 +94,11 @@ public class Alumnos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblAlumnos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAlumnosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAlumnos);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14))); // NOI18N
@@ -160,6 +165,11 @@ public class Alumnos extends javax.swing.JFrame {
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnLimpiar.setText("Limpiar");
@@ -328,12 +338,112 @@ public class Alumnos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+       
+       int id = Integer.parseInt(txtId.getText());
+       String matricula = txtMatricula.getText();
+       String nombre = txtNombre.getText();
+       int edad = Integer.parseInt(txtEdad.getText());
+       String email = txtEmail.getText();
+       String sexo;
+       if(rbMasculino.isSelected()==true){
+           sexo ="M";
+       }else if(rbFemenino.isSelected()==true){
+           sexo = "F";
+       }else{
+           sexo = "M";
+       }
+       
+        try {
+            Conexion conexion = new Conexion();
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement("UPDATE alumnos SET (matricula = ?,nombre = ?,edad = ?,sexo = ?,email = ?) where id = ?");
+            
+            ps.setString(1,matricula);
+            ps.setString(2,nombre);
+            ps.setInt(3,edad);
+            ps.setString(4,sexo);
+            ps.setString(5,email);
+            ps.setInt(6,1);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Registro modificado");
+            limpiar();
+            cargarTabla();
+            
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null,e.toString());
+        }
+        
+        
+        
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
+
+    private void tblAlumnosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAlumnosMouseClicked
+        try {
+            int fila = tblAlumnos.getSelectedRow();
+            int id = Integer.parseInt(tblAlumnos.getValueAt(fila,0).toString());
+            Conexion conexion = new Conexion();
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement("SELECT matricula,nombre,edad,sexo,email from alumnos where id=?");
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                txtId.setText(String.valueOf(id));
+                txtMatricula.setText(rs.getString("matricula"));
+                txtNombre.setText(rs.getString("nombre"));
+                txtEdad.setText(rs.getString("edad"));
+                txtEmail.setText(rs.getString("email"));
+                
+                if(rs.getString("sexo").equals("M")){
+                    rbMasculino.setSelected(true);
+                }else if (rs.getString("sexo").equals("F")){
+                    rbFemenino.setSelected(true);
+                }
+            }
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null,e.toString());
+        }
+    }//GEN-LAST:event_tblAlumnosMouseClicked
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+       int id = Integer.parseInt(txtId.getText());
+       String matricula = txtMatricula.getText();
+       String nombre = txtNombre.getText();
+       int edad = Integer.parseInt(txtEdad.getText());
+       String email = txtEmail.getText();
+       String sexo;
+       if(rbMasculino.isSelected()==true){
+           sexo ="M";
+       }else if(rbFemenino.isSelected()==true){
+           sexo = "F";
+       }else{
+           sexo = "M";
+       }
+       
+        try {
+            Conexion conexion = new Conexion();
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement("UPDATE alumnos SET (matricula = ?,nombre = ?,edad = ?,sexo = ?,email = ?) where id = ?");
+            
+            ps.setString(1,matricula);
+            ps.setString(2,nombre);
+            ps.setInt(3,edad);
+            ps.setString(4,sexo);
+            ps.setString(5,email);
+            ps.setInt(6,1);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Registro modificado");
+            limpiar();
+            cargarTabla();
+            
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null,e.toString());
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
    
     private void limpiar(){
