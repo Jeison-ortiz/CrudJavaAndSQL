@@ -354,6 +354,11 @@ public class Alumnos extends javax.swing.JFrame {
         ResultSetMetaData rsmd;
         int columnas;
         
+        int [] anchos = {10, 50, 100, 30, 100};
+        for (int i =0; i<tblAlumnos.getColumnCount(); i++){
+            tblAlumnos.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+        
         try{
             Conexion conexion = new Conexion();
             Connection con = conexion.getConexion();
