@@ -173,6 +173,11 @@ public class Alumnos extends javax.swing.JFrame {
 
         btnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         txtId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtId.addActionListener(new java.awt.event.ActionListener() {
@@ -426,6 +431,10 @@ public class Alumnos extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(null,e.toString());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiar();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
    
     private void limpiar(){
