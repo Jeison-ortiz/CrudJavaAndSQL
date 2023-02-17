@@ -361,7 +361,7 @@ public class Alumnos extends javax.swing.JFrame {
         try {
             Conexion conexion = new Conexion();
             Connection con = conexion.getConexion();
-            PreparedStatement ps = con.prepareStatement("UPDATE alumnos SET (matricula = ?,nombre = ?,edad = ?,sexo = ?,email = ?) where id = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE alumnos SET matricula=?, nombre=?, edad=?, sexo=?, email= ? where id=?");
             
             ps.setString(1,matricula);
             ps.setString(2,nombre);
