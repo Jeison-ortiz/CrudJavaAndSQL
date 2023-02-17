@@ -420,7 +420,7 @@ public class Alumnos extends javax.swing.JFrame {
        try {
             Conexion conexion = new Conexion();
             Connection con = conexion.getConexion();
-            PreparedStatement ps = con.prepareStatement("DELETE FROM alumnos where id = ?");       
+            PreparedStatement ps = con.prepareStatement("UPDATE alumnos SET activo=0 where id = ?");       
             ps.setInt(1, id);
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null,"Registro eliminado");
@@ -463,7 +463,7 @@ public class Alumnos extends javax.swing.JFrame {
         try{
             Conexion conexion = new Conexion();
             Connection con = conexion.getConexion();
-            ps = con.prepareStatement("SELECT id, matricula,nombre,sexo,email from alumnos");
+            ps = con.prepareStatement("SELECT id, matricula,nombre,sexo,email from alumnos WHERE activo=1");
             rs = ps.executeQuery();
             rsmd = rs.getMetaData();
             columnas = rsmd.getColumnCount();
