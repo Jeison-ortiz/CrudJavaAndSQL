@@ -410,33 +410,15 @@ public class Alumnos extends javax.swing.JFrame {
     }//GEN-LAST:event_tblAlumnosMouseClicked
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+     
        int id = Integer.parseInt(txtId.getText());
-       String matricula = txtMatricula.getText();
-       String nombre = txtNombre.getText();
-       int edad = Integer.parseInt(txtEdad.getText());
-       String email = txtEmail.getText();
-       String sexo;
-       if(rbMasculino.isSelected()==true){
-           sexo ="M";
-       }else if(rbFemenino.isSelected()==true){
-           sexo = "F";
-       }else{
-           sexo = "M";
-       }
-       
-        try {
+       try {
             Conexion conexion = new Conexion();
             Connection con = conexion.getConexion();
-            PreparedStatement ps = con.prepareStatement("UPDATE alumnos SET (matricula = ?,nombre = ?,edad = ?,sexo = ?,email = ?) where id = ?");
-            
-            ps.setString(1,matricula);
-            ps.setString(2,nombre);
-            ps.setInt(3,edad);
-            ps.setString(4,sexo);
-            ps.setString(5,email);
-            ps.setInt(6,1);
+            PreparedStatement ps = con.prepareStatement("DELETE FROM alumnos where id = ?");       
+            ps.setInt(1, id);
             ps.executeUpdate();
-            JOptionPane.showMessageDialog(null,"Registro modificado");
+            JOptionPane.showMessageDialog(null,"Registro eliminado");
             limpiar();
             cargarTabla();
             
